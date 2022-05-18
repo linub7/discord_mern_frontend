@@ -1,5 +1,7 @@
+import AuthBox from 'components/shared/AuthBox';
+
 const Register = () => {
-  return <div>Register</div>;
+  return <AuthBox>Register</AuthBox>;
 };
 
 export default Register;
