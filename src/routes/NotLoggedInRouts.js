@@ -5,5 +5,5 @@ export default function NotLoggedInRoutes() {
   const {
     auth: { userDetails },
   } = useSelector((state) => ({ ...state }));
-  return userDetails ? <Navigate to={'/'} /> : <Outlet />;
+  return userDetails ? <Navigate to={'/dashboard'} /> : <Outlet />;
 }
