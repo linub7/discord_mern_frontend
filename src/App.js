@@ -1,3 +1,4 @@
+import AlertNotification from 'components/shared/AlertNotification';
 import Login from 'pages/authPages/login';
 import Register from 'pages/authPages/register';
 import Dashboard from 'pages/dashboard';
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<Home />} exact />
         </Route>
       </Routes>
+      <AlertNotification />
     </>
   );
 }

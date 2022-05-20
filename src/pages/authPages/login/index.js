@@ -2,16 +2,26 @@ import LoginFooter from 'components/login/LoginFooter';
 import LoginHeader from 'components/login/LoginHeader';
 import LoginInputs from 'components/login/LoginInputs';
 import AuthBox from 'components/shared/AuthBox';
-import { useState } from 'react';
+import { validateLoginForm } from 'utils/validators';
+import { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { getActions } from 'store/actions/authActions';
+import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isFormValid, setIsFormValid] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log(email);
-    console.log(password);
+  useEffect(() => {
+    setIsFormValid(validateLoginForm({ email, password }));
+  }, [email, password, setIsFormValid]);
+
+  const handleLogin = () => {
+    const userDetails = { email, password };
+    login(userDetails);
+    navigate('/dashboard');
   };
   return (
     <AuthBox>
@@ -22,9 +32,15 @@ const Login = () => {
         setEmail={setEmail}
         setPassword={setPassword}
       />
-      <LoginFooter isFormValid={email && password} handleLogin={handleLogin} />
+      <LoginFooter isFormValid={isFormValid} handleLogin={handleLogin} />
     </AuthBox>
   );
 };
 
-export default Login;
+const mapActionsToProps = (dispatch) => {
+  return {
+    ...getActions(dispatch),
+  };
+};
+
+export default connect(null, mapActionsToProps)(Login);

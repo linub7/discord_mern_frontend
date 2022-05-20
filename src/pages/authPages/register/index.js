@@ -2,18 +2,28 @@ import RegisterFooter from 'components/register/RegisterFooter';
 import RegisterHeader from 'components/register/RegisterHeader';
 import RegisterInputs from 'components/register/RegisterInputs';
 import AuthBox from 'components/shared/AuthBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { validateRegisterForm } from 'utils/validators';
+import { connect } from 'react-redux';
+import { getActions } from 'store/actions/authActions';
+import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+const Register = ({ register }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsFormValid(validateRegisterForm({ email, password, username }));
+  }, [email, password, username, setIsFormValid]);
 
   const handleRegister = (e) => {
-    e.preventDefault();
-    console.log(username);
-    console.log(email);
-    console.log(password);
+    const userDetails = { username, email, password };
+    register(userDetails);
+    navigate('/dashboard');
   };
   return (
     <AuthBox>
@@ -27,11 +37,17 @@ const Register = () => {
         setPassword={setPassword}
       />
       <RegisterFooter
-        isFormValid={username && email && password}
+        isFormValid={isFormValid}
         handleRegister={handleRegister}
       />
     </AuthBox>
   );
 };
 
-export default Register;
+const mapActionsToProps = (dispatch) => {
+  return {
+    ...getActions(dispatch),
+  };
+};
+
+export default connect(null, mapActionsToProps)(Register);
