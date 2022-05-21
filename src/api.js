@@ -28,7 +28,8 @@ export const login = async (data) => {
     return await apiClient.post('/auth/login', data);
   } catch (error) {
     console.log(error);
-    return { error: true, message: error.response.data.message };
+    checkResponseCode(error);
+    return { error: true, message: error.response?.data?.message };
   }
 };
 
@@ -37,7 +38,18 @@ export const register = async (data) => {
     return await apiClient.post('/auth/register', data);
   } catch (error) {
     console.log(error);
-    return { error: true, message: error.response.data.message };
+    checkResponseCode(error);
+    return { error: true, message: error.response?.data?.message };
+  }
+};
+
+export const sendFriendInvitation = async (data) => {
+  try {
+    return await apiClient.post('/friend-invitation/invite', data);
+  } catch (error) {
+    console.log(error);
+    checkResponseCode(error);
+    return { error: true, message: error.response?.data?.message };
   }
 };
 
