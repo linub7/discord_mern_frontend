@@ -26,7 +26,7 @@ const DUMMY_FRIENDS = [
 
 const FriendsList = () => {
   return (
-    <MainContainer>
+    <MainContainer className="scrollbar">
       {DUMMY_FRIENDS?.map((friend) => (
         <FriendsListItem
           username={friend.username}

@@ -3,6 +3,9 @@ import AppBar from 'components/dashboard/AppBar';
 import FriendsSideBar from 'components/dashboard/FriendsSideBar';
 import Messenger from 'components/dashboard/Messenger';
 import SideBar from 'components/dashboard/SideBar';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { connectWithSocketServer } from 'realtime-communication/socketConnection';
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -11,6 +14,14 @@ const Wrapper = styled('div')({
 });
 
 const Dashboard = () => {
+  const {
+    auth: { userDetails },
+  } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    connectWithSocketServer(userDetails);
+  }, []);
+
   return (
     <Wrapper>
       <SideBar />
