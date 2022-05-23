@@ -43,6 +43,15 @@ export const register = async (data) => {
   }
 };
 
+// secure routes
+const checkResponseCode = (error) => {
+  const responseCode = error?.response?.status;
+
+  if (responseCode) {
+    (responseCode === 401 || responseCode === 403) && logout();
+  }
+};
+
 export const sendFriendInvitation = async (data) => {
   try {
     return await apiClient.post('/friend-invitation/invite', data);
@@ -53,11 +62,21 @@ export const sendFriendInvitation = async (data) => {
   }
 };
 
-// secure routes
-const checkResponseCode = (error) => {
-  const responseCode = error?.response?.status;
-
-  if (responseCode) {
-    (responseCode === 401 || responseCode === 403) && logout();
+export const acceptFriendInvitation = async (data) => {
+  try {
+    return await apiClient.post('/friend-invitation/accept', data);
+  } catch (error) {
+    console.log(error);
+    checkResponseCode(error);
+    return { error: true, message: error.response?.data?.message };
+  }
+};
+export const rejectFriendInvitation = async (data) => {
+  try {
+    return await apiClient.post('/friend-invitation/reject', data);
+  } catch (error) {
+    console.log(error);
+    checkResponseCode(error);
+    return { error: true, message: error.response?.data?.message };
   }
 };
