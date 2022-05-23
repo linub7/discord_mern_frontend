@@ -7,11 +7,20 @@ const MainContainer = styled('div')({
   width: '100%',
 });
 
-const FriendsList = ({ friends }) => {
-  console.log(friends);
+const FriendsList = ({ friends, onlineUsers }) => {
+  const checkOnlineUsers = (friends = [], onlineUsers = []) => {
+    friends.forEach((friend) => {
+      const isUserOnline = onlineUsers.find(
+        (user) => user.userId === friend.id
+      );
+      friend.isOnline = isUserOnline ? true : false;
+    });
+
+    return friends;
+  };
   return (
     <MainContainer className="scrollbar">
-      {friends?.map((friend) => (
+      {checkOnlineUsers(friends, onlineUsers)?.map((friend) => (
         <FriendsListItem
           username={friend.username}
           key={friend.id}
