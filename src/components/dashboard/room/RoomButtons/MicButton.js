@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MdMic, MdMicOff } from 'react-icons/md';
 
 const MicButton = () => {
-  const [micEnabled, setMicEnabled] = useState(true);
+  const [micEnabled, setMicEnabled] = useState(false);
 
   const handleToggleMic = () => setMicEnabled(!micEnabled);
   return (
