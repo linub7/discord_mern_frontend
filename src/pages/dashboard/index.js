@@ -6,6 +6,8 @@ import SideBar from 'components/dashboard/SideBar';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { connectWithSocketServer } from 'realtime-communication/socketConnection';
+import { connect } from 'react-redux';
+import Room from 'components/dashboard/room';
 
 const Wrapper = styled('div')({
   width: '100%',
@@ -13,7 +15,7 @@ const Wrapper = styled('div')({
   display: 'flex',
 });
 
-const Dashboard = () => {
+const Dashboard = ({ isUserInRoom }) => {
   const {
     auth: { userDetails },
   } = useSelector((state) => ({ ...state }));
@@ -28,8 +30,15 @@ const Dashboard = () => {
       <FriendsSideBar />
       <Messenger />
       <AppBar />
+      {isUserInRoom && <Room />}
     </Wrapper>
   );
 };
 
-export default Dashboard;
+const mapStoreStateToProps = ({ room }) => {
+  return {
+    ...room,
+  };
+};
+
+export default connect(mapStoreStateToProps)(Dashboard);
