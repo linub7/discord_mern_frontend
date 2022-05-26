@@ -30,15 +30,7 @@ const SameAuthorMessageText = styled('div')({
   marginLeft: '70px',
 });
 
-const Message = ({ message }) => {
-  const {
-    content,
-    author: { username },
-    sameAuthor,
-    date,
-    sameDay,
-  } = message;
-
+const Message = ({ content, username, sameAuthor, sameDay, date }) => {
   if (sameAuthor && sameDay) {
     return (
       <SameAuthorMessageContent>
