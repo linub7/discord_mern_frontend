@@ -13,11 +13,18 @@ const initialState = {
 };
 
 const roomReducer = (state = initialState, action) => {
-  const { type, isUserRoomCreator, isUserInRoom } = action;
+  const { type, isUserRoomCreator, isUserInRoom, roomDetails, activeRooms } =
+    action;
 
   switch (type) {
     case roomActions.OPEN_ROOM:
       return { ...state, isUserRoomCreator, isUserInRoom };
+
+    case roomActions.SET_ROOM_DETAILS:
+      return { ...state, roomDetails };
+
+    case roomActions.SET_ACTIVE_ROOMS:
+      return { ...state, activeRooms };
 
     default:
       return state;
