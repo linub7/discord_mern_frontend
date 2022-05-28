@@ -1,6 +1,7 @@
 import store from 'store';
 import {
   setActiveRooms,
+  setLocalStream,
   setOpenRoom,
   setRoomDetails,
 } from 'store/actions/roomActions';
@@ -15,7 +16,9 @@ export const createNewRoom = () => {
     socketConnection.createNewRoom();
   };
 
-  getLocalStreamPreview(false, successCallbackFn);
+  const audioOnly = store.getState().room.audioOnly;
+
+  getLocalStreamPreview(audioOnly, successCallbackFn);
 };
 
 export const newRoomCreated = (data) => {
@@ -50,11 +53,22 @@ export const joinRoom = (roomId) => {
     socketConnection.joinRoom({ roomId });
   };
 
-  getLocalStreamPreview(false, successCallbackFn);
+  const audioOnly = store.getState().room.audioOnly;
+
+  getLocalStreamPreview(audioOnly, successCallbackFn);
 };
 
 export const leaveRoom = () => {
   const roomId = store.getState().room.roomDetails.roomId;
+
+  const localStream = store.getState().room.localStream;
+
+  if (localStream) {
+    localStream.getTracks().forEach((track) => {
+      track.stop();
+    });
+    store.dispatch(setLocalStream(null));
+  }
 
   socketConnection.leaveRoom({ roomId });
   store.dispatch(setRoomDetails(null));

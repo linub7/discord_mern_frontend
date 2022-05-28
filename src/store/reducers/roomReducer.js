@@ -20,6 +20,7 @@ const roomReducer = (state = initialState, action) => {
     roomDetails,
     activeRooms,
     localStream,
+    audioOnly,
   } = action;
 
   switch (type) {
@@ -34,6 +35,9 @@ const roomReducer = (state = initialState, action) => {
 
     case roomActions.SET_LOCAL_STREAM:
       return { ...state, localStream };
+
+    case roomActions.SET_AUDIO_ONLY:
+      return { ...state, audioOnly };
 
     default:
       return state;

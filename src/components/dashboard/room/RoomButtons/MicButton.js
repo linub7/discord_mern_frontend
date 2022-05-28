@@ -1,16 +1,29 @@
 import { IconButton } from '@mui/material';
-import { useState } from 'react';
 import { MdMic, MdMicOff } from 'react-icons/md';
+import { connect } from 'react-redux';
+import { getActions } from 'store/actions/roomActions';
 
-const MicButton = () => {
-  const [micEnabled, setMicEnabled] = useState(false);
-
-  const handleToggleMic = () => setMicEnabled(!micEnabled);
+const MicButton = ({ audioOnly, setToggleAudio }) => {
+  const handleToggleMic = () => {
+    setToggleAudio(!audioOnly);
+  };
   return (
     <IconButton onClick={handleToggleMic} style={{ color: 'white' }}>
-      {micEnabled ? <MdMicOff /> : <MdMic />}
+      {audioOnly ? <MdMicOff /> : <MdMic />}
     </IconButton>
   );
 };
 
-export default MicButton;
+const mapActionsToProps = (dispatch) => {
+  return {
+    ...getActions(dispatch),
+  };
+};
+
+const mapStateToProps = ({ room }) => {
+  return {
+    ...room,
+  };
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(MicButton);
