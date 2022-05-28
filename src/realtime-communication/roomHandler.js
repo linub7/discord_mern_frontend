@@ -5,11 +5,17 @@ import {
   setRoomDetails,
 } from 'store/actions/roomActions';
 import * as socketConnection from './socketConnection';
+import { getLocalStreamPreview } from './webRTCHandler';
 
 export const createNewRoom = () => {
-  store.dispatch(setOpenRoom(true, true));
+  // this logic only work when we successfully get an access to the localStream
+  const successCallbackFn = () => {
+    store.dispatch(setOpenRoom(true, true));
 
-  socketConnection.createNewRoom();
+    socketConnection.createNewRoom();
+  };
+
+  getLocalStreamPreview(false, successCallbackFn);
 };
 
 export const newRoomCreated = (data) => {
@@ -37,10 +43,14 @@ export const updateActiveRooms = (data) => {
 };
 
 export const joinRoom = (roomId) => {
-  store.dispatch(setRoomDetails({ roomId }));
-  store.dispatch(setOpenRoom(false, true));
+  const successCallbackFn = () => {
+    store.dispatch(setRoomDetails({ roomId }));
+    store.dispatch(setOpenRoom(false, true));
 
-  socketConnection.joinRoom({ roomId });
+    socketConnection.joinRoom({ roomId });
+  };
+
+  getLocalStreamPreview(false, successCallbackFn);
 };
 
 export const leaveRoom = () => {

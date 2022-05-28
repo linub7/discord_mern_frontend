@@ -13,8 +13,14 @@ const initialState = {
 };
 
 const roomReducer = (state = initialState, action) => {
-  const { type, isUserRoomCreator, isUserInRoom, roomDetails, activeRooms } =
-    action;
+  const {
+    type,
+    isUserRoomCreator,
+    isUserInRoom,
+    roomDetails,
+    activeRooms,
+    localStream,
+  } = action;
 
   switch (type) {
     case roomActions.OPEN_ROOM:
@@ -25,6 +31,9 @@ const roomReducer = (state = initialState, action) => {
 
     case roomActions.SET_ACTIVE_ROOMS:
       return { ...state, activeRooms };
+
+    case roomActions.SET_LOCAL_STREAM:
+      return { ...state, localStream };
 
     default:
       return state;
