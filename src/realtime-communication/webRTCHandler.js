@@ -1,5 +1,23 @@
 import store from 'store';
 import { setLocalStream } from 'store/actions/roomActions';
+import Peer from 'simple-peer';
+
+const getConfiguration = () => {
+  const turnIceServers = null;
+
+  if (turnIceServers) {
+    // TODO user TURN server credentials
+  } else {
+    console.warn('Using only STUN server');
+    return {
+      iceServers: [
+        {
+          urls: 'stun:stun.l.google.com:19302',
+        },
+      ],
+    };
+  }
+};
 
 const onlyAudioConstraints = {
   audio: true,
@@ -25,4 +43,38 @@ export const getLocalStreamPreview = (onlyAudio, callbackFn) => {
       console.log(error);
       console.log('Cannot get access to local stream');
     });
+};
+
+let peers = {};
+
+export const prepareNewPeerConnection = (connUserSocketId, isInitiator) => {
+  const localStream = store.getState().room.localStream;
+
+  if (isInitiator) {
+    console.log('preparing new peer connection as initiator');
+  } else {
+    console.log('preparing new peer connection as not initiator');
+  }
+
+  peers[connUserSocketId] = new Peer({
+    initiator: isInitiator,
+    stream: localStream,
+    config: getConfiguration(),
+  });
+
+  peers[connUserSocketId].on('signal', (data) => {
+    const signalData = {
+      signal: data,
+      connUserSocketId,
+    };
+
+    // TODO:
+    // pass signaling data to other user
+    // signalPeerData(signalData);
+  });
+
+  peers[connUserSocketId].on('stream', (remoteStream) => {
+    // TODO:
+    // add new remote stream to our server store
+  });
 };

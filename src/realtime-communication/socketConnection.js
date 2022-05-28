@@ -7,6 +7,7 @@ import {
 } from 'store/actions/friendsActions';
 import { updateDirectChatHistoryIfActive } from 'utils/chat';
 import { newRoomCreated, updateActiveRooms } from './roomHandler';
+import { prepareNewPeerConnection } from './webRTCHandler';
 
 let socket = null;
 
@@ -51,6 +52,12 @@ export const connectWithSocketServer = (userDetails) => {
 
   socket.on('active-rooms', (data) => {
     updateActiveRooms(data);
+  });
+
+  socket.on('conn-prepare', (data) => {
+    const { connUserSocketId } = data;
+
+    prepareNewPeerConnection(connUserSocketId, false);
   });
 };
 
