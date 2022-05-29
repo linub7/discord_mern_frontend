@@ -11,6 +11,7 @@ const MainContainer = styled('div')({
 const VideoElement = styled('video')({
   width: '100%',
   height: '100%',
+  borderRadius: '8px',
 });
 
 const Video = ({ stream, isLocalStream }) => {

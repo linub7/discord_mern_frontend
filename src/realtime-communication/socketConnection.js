@@ -7,7 +7,7 @@ import {
 } from 'store/actions/friendsActions';
 import { updateDirectChatHistoryIfActive } from 'utils/chat';
 import { newRoomCreated, updateActiveRooms } from './roomHandler';
-import { prepareNewPeerConnection } from './webRTCHandler';
+import { handleSignalingData, prepareNewPeerConnection } from './webRTCHandler';
 
 let socket = null;
 
@@ -58,6 +58,17 @@ export const connectWithSocketServer = (userDetails) => {
     const { connUserSocketId } = data;
 
     prepareNewPeerConnection(connUserSocketId, false);
+    socket.emit('conn-init', { connUserSocketId });
+  });
+
+  socket.on('conn-init', (data) => {
+    const { connUserSocketId } = data;
+
+    prepareNewPeerConnection(connUserSocketId, true);
+  });
+
+  socket.on('conn-signal', (data) => {
+    handleSignalingData(data);
   });
 };
 
@@ -79,4 +90,8 @@ export const joinRoom = (data) => {
 
 export const leaveRoom = (data) => {
   socket.emit('room-leave', data);
+};
+
+export const signalPeerData = (data) => {
+  socket.emit('conn-signal', data);
 };
