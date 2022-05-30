@@ -2,13 +2,16 @@ import { IconButton } from '@mui/material';
 import { useState } from 'react';
 import { MdVideocam, MdVideocamOff } from 'react-icons/md';
 
-const CameraButton = () => {
-  const [cameraEnabled, setCameraEnabled] = useState(false);
+const CameraButton = ({ localStream }) => {
+  const [cameraEnabled, setCameraEnabled] = useState(true);
 
-  const handleToggleCamera = () => setCameraEnabled(!cameraEnabled);
+  const handleToggleCamera = () => {
+    localStream.getVideoTracks()[0].enabled = !cameraEnabled;
+    setCameraEnabled(!cameraEnabled);
+  };
   return (
     <IconButton onClick={handleToggleCamera} style={{ color: 'white' }}>
-      {cameraEnabled ? <MdVideocamOff /> : <MdVideocam />}
+      {cameraEnabled ? <MdVideocam /> : <MdVideocamOff />}
     </IconButton>
   );
 };

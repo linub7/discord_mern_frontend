@@ -3,13 +3,14 @@ import { MdMic, MdMicOff } from 'react-icons/md';
 import { connect } from 'react-redux';
 import { getActions } from 'store/actions/roomActions';
 
-const MicButton = ({ audioOnly, setToggleAudio }) => {
+const MicButton = ({ audioOnly, setToggleAudio, localStream }) => {
   const handleToggleMic = () => {
+    localStream.getAudioTracks()[0].enabled = !audioOnly;
     setToggleAudio(!audioOnly);
   };
   return (
     <IconButton onClick={handleToggleMic} style={{ color: 'white' }}>
-      {audioOnly ? <MdMicOff /> : <MdMic />}
+      {audioOnly ? <MdMic /> : <MdMicOff />}
     </IconButton>
   );
 };
