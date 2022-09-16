@@ -3,8 +3,7 @@ import Cookies from 'js-cookie';
 import { logout } from 'utils/auth';
 
 const apiClient = axios.create({
-  baseURL: `${process.env.REACT_APP_BACKEND}/api/v1`,
-  // baseURL: 'http://localhost:8000/api/v1',
+  baseURL: process.env.REACT_APP_BACKEND_URL,
 });
 
 apiClient.interceptors.request.use(
